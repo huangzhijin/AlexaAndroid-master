@@ -1,0 +1,70 @@
+apply plugin: 'com.android.application'
+
+//if (file('signing.gradle').exists()) {
+//    apply from: 'signing.gradle'
+//}else{
+//    throw new TaskExecutionException(null, new Exception("Unable to find signing.gradle, please replace Android buildTypes > signing configs with your own configuration."));
+//}
+
+android {
+    signingConfigs {
+        lwa {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('C:/Users/pc/.android/debug.keystore')
+            storePassword 'android'
+        }
+    }
+    compileSdkVersion 24
+    buildToolsVersion '25.0.1'
+    defaultConfig {
+        applicationId "com.willblaschko.android.alexavoicelibrary"
+        minSdkVersion 21
+
+        targetSdkVersion 24
+        versionCode 5
+        versionName "2.1.1"
+        multiDexEnabled true;
+    }
+//    signingConfigs {
+//        debug {
+//            storeFile file("debug.3p.keystore")
+//        }
+//    }
+    buildTypes {
+
+        debug {
+            versionNameSuffix " Debug"
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.lwa
+        }
+        release {
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.lwa
+        }
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:recyclerview-v7:24.2.1'
+    compile 'com.android.support:multidex:1.0.1'
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile project(path: ':libs:AlexaAndroid')
+    compile project(path: ':libs:RecorderLevelView')
+    compile project(path: ':libs:speechutils-master')
+}
+
